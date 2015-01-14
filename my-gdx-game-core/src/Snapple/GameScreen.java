@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
 	long lastLetterTime;
 	int lettersGathered;
 	Texture tile;
-
+	Texture bg;
 	public GameScreen(final Drop gam) {
 		this.game = gam;
 
@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
 		 * Texture(Gdx.files.internal(i+".png")); letterTiles.add(tile); }
 		 */
 		snakeImage = new Texture(Gdx.files.internal("snake.png"));
-
+		bg= new Texture(Gdx.files.internal("ingameBG/ingameBG.png"));
 		// load the drop sound effect and the rain background "music"
 		// dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
 		// rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
@@ -132,7 +132,7 @@ public class GameScreen implements Screen {
 		// all drops
 		game.batch.begin();		
 //		background
-		Texture bg= new Texture(Gdx.files.internal("ingameBG/ingameBG.png"));
+		
 		game.batch.draw(bg,0,0);
 //		score title
 		game.font.draw(game.batch, "YOUR SCORE " + lettersGathered, 670,460);
