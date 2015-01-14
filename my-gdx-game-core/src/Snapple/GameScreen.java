@@ -27,6 +27,8 @@ public class GameScreen implements Screen {
 	OrthographicCamera camera;
 	Rectangle snake;
 	Array<Rectangle> letters;
+	Rectangle obstacle;
+	
 	long lastLetterTime;
 	int lettersGathered;
 	Texture tile;
@@ -52,7 +54,8 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 
-		// create a Rectangle to logically represent the snake
+		// create a Rectangle to logically represent the snake 
+		//	OH LIKE A COLLISION DETECTOR SHIELD THING OMG
 		snake = new Rectangle();
 		snake.x = 800 / 2 - 32 / 2; // center the snake horizontally
 		snake.y = 480 / 2 - 32 / 2; // bottom left corner of the snake is 20
@@ -61,6 +64,14 @@ public class GameScreen implements Screen {
 		snake.width = 32;
 		snake.height = 32;
 
+		
+//		obstacle = new Rectangle();
+//		obstacle.x = 800/2 - 32/2;
+//		obstacle.y = 480/2 - 32/2;
+//		obstacle.width=20;
+//		obstacle.height=60;
+//		obstacle.se
+		
 		// create the letters array and spawn the first letter
 		letters = new Array<Rectangle>();
 		//spawnletter();
@@ -75,6 +86,17 @@ public class GameScreen implements Screen {
 		letter.height = 32;
 		letters.add(letter);
 		lastLetterTime = TimeUtils.nanoTime();
+		
+		if (letter.x < 100 - 84)
+			letter.x = 100 - 84;
+		if (letter.x > 830 - 84)
+			letter.x= 830 - 84;
+		if (letter.y < 160 - 84)
+			letter.y = 160 - 84;
+		if (letter.y > 450 - 84)
+			letter.y= 450 - 84;
+		
+
 	}
 	
 	private Texture randTile()
@@ -93,8 +115,9 @@ public class GameScreen implements Screen {
 		// arguments to glClearColor are the red, green
 		// blue and alpha component in the range [0,1]
 		// of the color to be used to clear the screen.
-		Gdx.gl.glClearColor(0.2f, 0, 0.2f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				
+		//Gdx.gl.glClearColor(0.2f, 0, 0.2f, 1);
+		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		tile=randTile();
 		
@@ -107,15 +130,20 @@ public class GameScreen implements Screen {
 
 		// begin a new batch and draw the snake and
 		// all drops
-		game.batch.begin();
-		game.font.draw(game.batch, "Letter Collected: " + lettersGathered, 0,
-				480);
+		game.batch.begin();		
+//		background
+		Texture bg= new Texture(Gdx.files.internal("ingameBG/ingameBG.png"));
+		game.batch.draw(bg,0,0);
+//		score title
+		game.font.draw(game.batch, "YOUR SCORE " + lettersGathered, 670,460);
+//		snake
 		game.batch.draw(snakeImage, snake.x, snake.y, 32, 32);
 		
-		
+//		letter generation
 		for (Rectangle letter : letters) {
 			game.batch.draw(tile, letter.x, letter.y);
 		}
+		
 		game.batch.end();
 
 		// process user input
@@ -125,26 +153,30 @@ public class GameScreen implements Screen {
 			camera.unproject(touchPos);
 			snake.x = touchPos.x - 64 / 2;
 		}
-
+		
 		// TODO: rotate on keypress
-		if (Gdx.input.isKeyPressed(Keys.LEFT))
+		if (Gdx.input.isKeyPressed(Keys.LEFT)){
 			snake.x -= 200 * Gdx.graphics.getDeltaTime();
-		if (Gdx.input.isKeyPressed(Keys.RIGHT))
+			snakeImage = new Texture(Gdx.files.internal("snakeLeft.png"));}
+		if (Gdx.input.isKeyPressed(Keys.RIGHT)){
 			snake.x += 200 * Gdx.graphics.getDeltaTime();
-		if (Gdx.input.isKeyPressed(Keys.UP))
+			snakeImage = new Texture(Gdx.files.internal("snakeRight.png"));}
+		if (Gdx.input.isKeyPressed(Keys.UP)){
 			snake.y += 200 * Gdx.graphics.getDeltaTime();
-		if (Gdx.input.isKeyPressed(Keys.DOWN))
+			snakeImage = new Texture(Gdx.files.internal("snake.png"));}
+		if (Gdx.input.isKeyPressed(Keys.DOWN)){
 			snake.y -= 200 * Gdx.graphics.getDeltaTime();
+			snakeImage = new Texture(Gdx.files.internal("snakeDown.png"));}
 
 		// make sure the snake stays within the screen bounds
-		if (snake.x < 0)
-			snake.x = 0;
-		if (snake.x > 800 - 64)
-			snake.x = 800 - 64;
-		if (snake.y < 0)
-			snake.y = 0;
-		if (snake.y > 480 - 64)
-			snake.y = 480 - 64;
+		if (snake.x < 100 - 84)
+			snake.x = 100 - 84;
+		if (snake.x > 830 - 84)
+			snake.x = 830 - 84;
+		if (snake.y < 160 - 84)
+			snake.y = 160 - 84;
+		if (snake.y > 480 - 84)
+			snake.y = 480 - 84;
 
 		// check if we need to create a new letterdrop (every 1 sec)
 		if (TimeUtils.nanoTime() - lastLetterTime > 1000000000)
@@ -168,6 +200,11 @@ public class GameScreen implements Screen {
 				
 			}
 		}
+		
+//		poop code
+//		if(snake.overlaps(obstacle)){
+//			System.out.println("ur ded");
+//		}
 	}
 
 	@Override
