@@ -36,6 +36,7 @@ public class MainMenuScreen implements Screen {
 */
 		Texture bg= new Texture(Gdx.files.internal("background.png"));
 		
+		Texture logo = new Texture(Gdx.files.internal("buttons/logo.png"));
 		Texture playbutt= new Texture(Gdx.files.internal("buttons/play.png")); //JUDGE ME
 		Texture scorebutt= new Texture(Gdx.files.internal("buttons/scores.png")); //hi
 		Texture credbutt= new Texture(Gdx.files.internal("buttons/credit.png")); //wat
@@ -52,6 +53,7 @@ public class MainMenuScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(bg,0,0);
+        game.batch.draw(logo,285,270);
         game.batch.draw(playbutt, 225,180);
         game.batch.draw(scorebutt, 225,100);
         game.batch.draw(credbutt, 225,20);
@@ -83,12 +85,12 @@ public class MainMenuScreen implements Screen {
         	     {
 //        	     System.out.print("ur touchin");
         	     game.setScreen(new GameScreen(game));
-        	     dispose();
+        	    // dispose();
         	     
         	     }
         	  
 //            game.setScreen(new GameScreen(game));
-//            dispose();
+            dispose();
         }
     }
 
